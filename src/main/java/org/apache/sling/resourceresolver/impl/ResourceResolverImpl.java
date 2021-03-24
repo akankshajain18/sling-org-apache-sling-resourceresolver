@@ -227,7 +227,9 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     public Resource resolve(final String path) {
         checkClosed();
 
+        logger.debug("[Test], Resolve start for path {}", path);
         final Resource rsrc = this.resolveInternal(null, path);
+        logger.debug("[Test], Resolve end for path {}", path);
         return rsrc;
     }
 
@@ -238,8 +240,14 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     public Resource resolve(final HttpServletRequest request) {
         checkClosed();
 
+        String path ="";
+        if(request != null){
+            path = request.getPathInfo();
+        }
+        logger.debug("[Test], Resolve start for request {}", path);
         // throws NPE if request is null as required
         final Resource rsrc = this.resolveInternal(request, request.getPathInfo());
+        logger.debug("[Test], Resolve end for request {} ", path);
         return rsrc;
     }
 
@@ -251,7 +259,9 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     public Resource resolve(final HttpServletRequest request, String path) {
         checkClosed();
 
+        logger.debug("[Test], Resolve start for path/request {}", path);
         final Resource rsrc = this.resolveInternal(request, path);
+        logger.debug("[Test], Resolve start for path/request {}", path);
         return rsrc;
     }
 
@@ -416,7 +426,12 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
      */
     @Override
     public String map(final HttpServletRequest request, final String resourcePath) {
-        return adaptTo(ResourceMapper.class).getMapping(resourcePath, request);
+        if(request != null) {
+            logger.debug("[Test] Resource resolver map Start, request{}, resourcepath: {} ", request.getPathInfo(), resourcePath);
+        }
+        String str =  adaptTo(ResourceMapper.class).getMapping(resourcePath, request);
+        logger.debug("[Test] Resource resolver map with mapping {}", str);
+        return str;
     }
 
     // ---------- search path for relative resoures

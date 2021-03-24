@@ -270,6 +270,7 @@ public class MapEntry implements Comparable<MapEntry> {
 
     // Returns the replacement or null if the value does not match
     public String[] replace(final String value) {
+        log.debug("[Test], replace start for {}", value);
         final Matcher m = urlPattern.matcher(value);
         if (m.find()) {
             final String[] redirects = getRedirect();
@@ -299,9 +300,11 @@ public class MapEntry implements Comparable<MapEntry> {
                     log.debug("Exception while replacing, ignoring entry {} ", redirects[i], iae);
              	}
             }
+            log.debug("[Test], replace end for {}", value);
             return results;
         }
 
+        log.debug("[Test], replace end for {}, returning null", value);
         return null;
     }
 

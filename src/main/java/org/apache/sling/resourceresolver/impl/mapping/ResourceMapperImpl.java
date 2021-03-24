@@ -69,11 +69,12 @@ public class ResourceMapperImpl implements ResourceMapper {
 
     @Override
     public String getMapping(String resourcePath, HttpServletRequest request) {
-        
+        logger.debug("[TEST], getMapping start for resourcepath/request {} ", resourcePath);
         Collection<String> mappings = getAllMappings(resourcePath, request);
         if ( mappings.isEmpty() )
             return null;
-        
+
+        logger.debug("[TEST], getMapping end for resourcepath/request {} ", resourcePath);
         return mappings.iterator().next();
     }
 
@@ -84,7 +85,7 @@ public class ResourceMapperImpl implements ResourceMapper {
 
     @Override
     public Collection<String> getAllMappings(String resourcePath, HttpServletRequest request) {
-        
+        logger.debug("[TEST], getAllMappings start for resourcepath/request {} ", resourcePath);
         resolver.checkClosed();
         
         // A note on the usage of the 'mappings' variable and the order of the results
@@ -149,7 +150,7 @@ public class ResourceMapperImpl implements ResourceMapper {
         final Resource nonDecoratedResource = resolver.resolveInternal(parsed.getRawPath(), parsed.getParameters());
         if (nonDecoratedResource != null) {
             String alias = loadAliasIfApplicable(nonDecoratedResource);
-            
+            logger.debug("[Test], alias returned {} ", alias);
             // 5. load mappings for alias
             if ( alias != null )
                 mappings.add(alias);
@@ -174,11 +175,12 @@ public class ResourceMapperImpl implements ResourceMapper {
         });
         
         Collections.reverse(mappings);
-        
+        logger.debug("[TEST], getAllMappings end for resourcepath/request {} ", resourcePath);
         return new LinkedHashSet<>(mappings);
     }
 
     private String loadAliasIfApplicable(final Resource nonDecoratedResource) {
+        logger.debug("[TEST], loadAliasIfApplicable start");
         //Invoke the decorator for the resolved resource
         Resource res = resourceDecorator.decorate(nonDecoratedResource);
 
@@ -209,6 +211,8 @@ public class ResourceMapperImpl implements ResourceMapper {
                                     break;
                                 }
                             }
+                        }else{
+                            logger.debug("[Test], Either alias null or {} is not present in alias list for parentpath {}", current.getName(), parentPath);
                         }
                     }
                 } else {
@@ -257,6 +261,7 @@ public class ResourceMapperImpl implements ResourceMapper {
     private void populateMappingsFromMapEntries(List<String> mappings, String mappedPath,
             final RequestContext requestContext) {
         boolean mappedPathIsUrl = false;
+        logger.debug("[TEST], populateMappingsFromMapEntries start, check mappedPath {}", mappedPath);
         for (final MapEntry mapEntry : mapEntries.getMapMaps()) {
             final String[] mappedPaths = mapEntry.replace(mappedPath);
             if (mappedPaths != null) {
@@ -292,12 +297,13 @@ public class ResourceMapperImpl implements ResourceMapper {
                 }
 
                 logger.debug("map: MapEntry {} matches, mapped path is {}", mapEntry, mappedPath);
-                
+
                 mappings.add(mappedPath);
 
                 break;
             }
         }
+        logger.debug("[TEST], populateMappingsFromMapEntries end, check mappedPath {}", mappedPath);
     }
     
     private String mangleNamespaces(String absPath) {
