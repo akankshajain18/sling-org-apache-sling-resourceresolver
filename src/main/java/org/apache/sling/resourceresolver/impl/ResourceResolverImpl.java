@@ -227,9 +227,9 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     public Resource resolve(final String path) {
         checkClosed();
 
-        logger.debug("[Test], Resolve start for path {}", path);
+        logger.info("[TEST], Resolve Start for path {}", path);
         final Resource rsrc = this.resolveInternal(null, path);
-        logger.debug("[Test], Resolve end for path {}", path);
+        logger.info("[TEST], Resolve End for path {}", path);
         return rsrc;
     }
 
@@ -244,10 +244,10 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
         if(request != null){
             path = request.getPathInfo();
         }
-        logger.debug("[Test], Resolve start for request {}", path);
+        logger.info("[TEST], Resolve Start for request {}", path);
         // throws NPE if request is null as required
         final Resource rsrc = this.resolveInternal(request, request.getPathInfo());
-        logger.debug("[Test], Resolve end for request {} ", path);
+        logger.info("[TEST], Resolve End for request {} ", path);
         return rsrc;
     }
 
@@ -259,9 +259,9 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     public Resource resolve(final HttpServletRequest request, String path) {
         checkClosed();
 
-        logger.debug("[Test], Resolve start for path/request {}", path);
+        logger.info("[TEST], Resolve Start for path/request {}", path);
         final Resource rsrc = this.resolveInternal(request, path);
-        logger.debug("[Test], Resolve start for path/request {}", path);
+        logger.info("[TEST], Resolve End for path/request {}", path);
         return rsrc;
     }
 
@@ -272,7 +272,7 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
         } else if (!absPath.startsWith("/")) {
             absPath = "/" + absPath;
         }
-
+        logger.info("[TEST], ResolveInternal Start for path/request {}", absPath);
         // check for special namespace prefix treatment
         absPath = unmangleNamespaces(absPath);
 
@@ -401,7 +401,7 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
         } else {
             logger.debug("resolve: Path {} resolves to Resource {}", absPath, res);
         }
-
+        logger.info("[TEST], ResolveInternal End for path/request {}", absPath);
         return this.factory.getResourceDecoratorTracker().decorate(res);
     }
 
@@ -427,10 +427,10 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     @Override
     public String map(final HttpServletRequest request, final String resourcePath) {
         if(request != null) {
-            logger.debug("[Test] Resource resolver map Start, request{}, resourcepath: {} ", request.getPathInfo(), resourcePath);
+            logger.info("[TEST] Resource resolver map Start, request{}, resourcepath: {} ", request.getPathInfo(), resourcePath);
         }
         String str =  adaptTo(ResourceMapper.class).getMapping(resourcePath, request);
-        logger.debug("[Test] Resource resolver map with mapping {}", str);
+        logger.info("[TEST] Resource resolver map End with mapping {}", str);
         return str;
     }
 
@@ -454,7 +454,9 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     @Override
     public Resource getResource(String path) {
         checkClosed();
+        logger.info("[TEST] getResource Start for path {}", path);
         final Resource result = this.getResourceInternal(null, path);
+        logger.info("[TEST] getResource End for path {}", path);
         return result;
     }
 
@@ -493,7 +495,7 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
     }
 
     private Resource getResourceInternal(Resource parent, String path) {
-
+        logger.info("[TEST] getResourceInternal Start for path {}", path);
         Resource result = null;
         if ( path != null ) {
             // if the path is absolute, normalize . and .. segments and get res
@@ -516,7 +518,7 @@ public class ResourceResolverImpl extends SlingAdaptable implements ResourceReso
                 }
             }
         }
-
+        logger.info("[TEST], getResourceInternal End for path {}", path);
         return result;
     }
 

@@ -69,12 +69,12 @@ public class ResourceMapperImpl implements ResourceMapper {
 
     @Override
     public String getMapping(String resourcePath, HttpServletRequest request) {
-        logger.debug("[TEST], getMapping start for resourcepath/request {} ", resourcePath);
+        logger.info("[TEST], getMapping Start for resourcepath/request {} ", resourcePath);
         Collection<String> mappings = getAllMappings(resourcePath, request);
         if ( mappings.isEmpty() )
             return null;
 
-        logger.debug("[TEST], getMapping end for resourcepath/request {} ", resourcePath);
+        logger.info("[TEST], getMapping End for resourcepath/request {} ", resourcePath);
         return mappings.iterator().next();
     }
 
@@ -85,7 +85,7 @@ public class ResourceMapperImpl implements ResourceMapper {
 
     @Override
     public Collection<String> getAllMappings(String resourcePath, HttpServletRequest request) {
-        logger.debug("[TEST], getAllMappings start for resourcepath/request {} ", resourcePath);
+        logger.info("[TEST], getAllMappings Start for resourcepath/request {} ", resourcePath);
         resolver.checkClosed();
         
         // A note on the usage of the 'mappings' variable and the order of the results
@@ -150,7 +150,7 @@ public class ResourceMapperImpl implements ResourceMapper {
         final Resource nonDecoratedResource = resolver.resolveInternal(parsed.getRawPath(), parsed.getParameters());
         if (nonDecoratedResource != null) {
             String alias = loadAliasIfApplicable(nonDecoratedResource);
-            logger.debug("[Test], alias returned {} ", alias);
+            logger.info("[TEST], alias returned {} ", alias);
             // 5. load mappings for alias
             if ( alias != null )
                 mappings.add(alias);
@@ -175,12 +175,12 @@ public class ResourceMapperImpl implements ResourceMapper {
         });
         
         Collections.reverse(mappings);
-        logger.debug("[TEST], getAllMappings end for resourcepath/request {} ", resourcePath);
+        logger.info("[TEST], getAllMappings End for resourcepath/request {} ", resourcePath);
         return new LinkedHashSet<>(mappings);
     }
 
     private String loadAliasIfApplicable(final Resource nonDecoratedResource) {
-        logger.debug("[TEST], loadAliasIfApplicable start");
+        logger.info("[TEST], loadAliasIfApplicable Start");
         //Invoke the decorator for the resolved resource
         Resource res = resourceDecorator.decorate(nonDecoratedResource);
 
@@ -212,7 +212,7 @@ public class ResourceMapperImpl implements ResourceMapper {
                                 }
                             }
                         }else{
-                            logger.debug("[Test], Either alias null or {} is not present in alias list for parentpath {}", current.getName(), parentPath);
+                            logger.info("[TEST], Either alias null or {} is not present in alias list for parentpath {}", current.getName(), parentPath);
                         }
                     }
                 } else {
@@ -254,14 +254,14 @@ public class ResourceMapperImpl implements ResourceMapper {
         String mappedPath = buf.toString();
 
         logger.debug("map: Alias mapping resolves to path {}", mappedPath);
-        
+        logger.info("[TEST], loadAliasIfApplicable End");
         return mappedPath;
     }
 
     private void populateMappingsFromMapEntries(List<String> mappings, String mappedPath,
             final RequestContext requestContext) {
         boolean mappedPathIsUrl = false;
-        logger.debug("[TEST], populateMappingsFromMapEntries start, check mappedPath {}", mappedPath);
+        logger.info("[TEST], populateMappingsFromMapEntries Start, check mappedPath {}", mappedPath);
         for (final MapEntry mapEntry : mapEntries.getMapMaps()) {
             final String[] mappedPaths = mapEntry.replace(mappedPath);
             if (mappedPaths != null) {
@@ -303,7 +303,7 @@ public class ResourceMapperImpl implements ResourceMapper {
                 break;
             }
         }
-        logger.debug("[TEST], populateMappingsFromMapEntries end, check mappedPath {}", mappedPath);
+        logger.info("[TEST], populateMappingsFromMapEntries End, check mappedPath {}", mappedPath);
     }
     
     private String mangleNamespaces(String absPath) {
